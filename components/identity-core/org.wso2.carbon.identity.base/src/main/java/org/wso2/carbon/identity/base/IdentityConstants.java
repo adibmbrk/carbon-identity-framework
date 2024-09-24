@@ -100,13 +100,6 @@ public class IdentityConstants {
     public final static String EVENT_LISTENER_PROPERTY = "Property";
     public final static String EVENT_LISTENER_PROPERTY_NAME = "name";
 
-    //Provisioning Handler Constants
-    public final static String OUTBOUND_PROVISIONING_CONFIG = "OutboundProvisioning";
-    public final static String PROVISIONING_HANDLERS = "ProvisioningHandlers";
-    public final static String PROVISIONING_HANDLER = "ProvisioningHandler";
-
-
-
     // Cache Config constants
     public final static String CACHE_CONFIG = "CacheConfig";
     public final static String CACHE_MANAGER = "CacheManager";

@@ -248,17 +248,17 @@ public class IdentityConfigParser {
     }
 
     private void buildProvisioningHandlerClasses() {
-        OMElement outBoundProvisioningElement = this.getConfigElement(IdentityConstants.OUTBOUND_PROVISIONING_CONFIG);
+        OMElement outBoundProvisioningElement = this.getConfigElement(IdentityCoreConstants.OUTBOUND_PROVISIONING_CONFIG);
 
         if (outBoundProvisioningElement != null) {
             // Retrieve the <ProvisioningHandlers> element inside <OutboundProvisioning>
             OMElement provisioningHandlersElement = outBoundProvisioningElement.getFirstChildWithName(
-                    new QName(IdentityCoreConstants.IDENTITY_DEFAULT_NAMESPACE, IdentityConstants.PROVISIONING_HANDLERS));
+                    new QName(IdentityCoreConstants.IDENTITY_DEFAULT_NAMESPACE, IdentityCoreConstants.PROVISIONING_HANDLERS));
 
             if (provisioningHandlersElement != null) {
                 // Get all <ProvisioningHandler> child elements within <ProvisioningHandlers>
                 Iterator<OMElement> provisioningHandlerElements = provisioningHandlersElement.getChildrenWithName(
-                        new QName(IdentityCoreConstants.IDENTITY_DEFAULT_NAMESPACE, IdentityConstants.PROVISIONING_HANDLER));
+                        new QName(IdentityCoreConstants.IDENTITY_DEFAULT_NAMESPACE, IdentityCoreConstants.PROVISIONING_HANDLER));
 
                 while (provisioningHandlerElements.hasNext()) {
                     OMElement provisioningHandlerElement = provisioningHandlerElements.next();
