@@ -18,6 +18,7 @@
 
 package org.wso2.carbon.identity.provisioning;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -31,6 +32,7 @@ import org.wso2.carbon.identity.application.common.util.IdentityApplicationConst
 import org.wso2.carbon.identity.application.mgt.ApplicationManagementService;
 import org.wso2.carbon.identity.claim.metadata.mgt.ClaimMetadataHandler;
 import org.wso2.carbon.identity.core.util.IdentityUtil;
+import org.wso2.carbon.identity.provisioning.rules.ProvisioningHandler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,6 +47,8 @@ import static org.wso2.carbon.identity.provisioning.IdentityProvisioningConstant
 public class ProvisioningUtil {
 
     private static final Log log = LogFactory.getLog(ProvisioningUtil.class);
+    private static List<String> outboundProvisioningHandlerConfigurationHolder = new ArrayList<>();
+    private static List<ProvisioningHandler> provisioningHandlers = new ArrayList<>();
 
     private ProvisioningUtil() {
     }
@@ -603,5 +607,22 @@ public class ProvisioningUtil {
                     .parseBoolean(IdentityUtil.getProperty(APPLICATION_BASED_OUTBOUND_PROVISIONING_ENABLED));
         }
         return applicationBasedOutboundProvisioningEnabled;
+    }
+
+    public static List<ProvisioningHandler> getOutboundProvisioningHandlers() {
+        outboundProvisioningHandlerConfigurationHolder = IdentityUtil.getOutboundProvisioningHandlerConfigurationHolder();
+        if (CollectionUtils.isNotEmpty(outboundProvisioningHandlerConfigurationHolder)) {
+            for (String handlerClassName : outboundProvisioningHandlerConfigurationHolder) {
+                try {
+                    Class<?> clazz = Class.forName(handlerClassName);
+                    ProvisioningHandler provisioningHandler = (ProvisioningHandler) clazz.newInstance();
+                    provisioningHandlers.add(provisioningHandler);
+
+                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+                    log.error("Error occurred while checking for provisioning handler configurations", e);
+                }
+            }
+        }
+        return provisioningHandlers;
     }
 }

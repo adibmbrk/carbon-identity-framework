@@ -54,7 +54,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 
-public class XACMLBasedRuleHandler {
+public class XACMLBasedRuleHandler implements ProvisioningHandler {
 
     private static final Log log = LogFactory.getLog(XACMLBasedRuleHandler.class);
     private static volatile XACMLBasedRuleHandler instance;

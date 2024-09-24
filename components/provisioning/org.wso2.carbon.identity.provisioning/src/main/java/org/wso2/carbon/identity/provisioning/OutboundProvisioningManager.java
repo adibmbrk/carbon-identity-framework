@@ -42,6 +42,7 @@ import org.wso2.carbon.identity.provisioning.cache.ServiceProviderProvisioningCo
 import org.wso2.carbon.identity.provisioning.dao.CacheBackedProvisioningMgtDAO;
 import org.wso2.carbon.identity.provisioning.dao.ProvisioningManagementDAO;
 import org.wso2.carbon.identity.provisioning.internal.IdentityProvisionServiceComponent;
+import org.wso2.carbon.identity.provisioning.rules.ProvisioningHandler;
 import org.wso2.carbon.identity.provisioning.rules.XACMLBasedRuleHandler;
 import org.wso2.carbon.idp.mgt.IdentityProviderManagementException;
 import org.wso2.carbon.idp.mgt.IdentityProviderManager;
@@ -53,6 +54,7 @@ import org.wso2.carbon.user.core.UserStoreManager;
 import org.wso2.carbon.user.core.claim.Claim;
 import org.wso2.carbon.user.core.service.RealmService;
 import org.wso2.carbon.user.core.util.UserCoreUtil;
+import org.wso2.carbon.identity.core.util.IdentityUtil;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
@@ -577,13 +579,14 @@ public class OutboundProvisioningManager {
                         boolean isAllowed = true;
                         boolean isBlocking = entry.getValue().isBlocking();
                         boolean isPolicyEnabled = entry.getValue().isPolicyEnabled();
-                        if (isPolicyEnabled) {
-                            isAllowed = XACMLBasedRuleHandler.getInstance().isAllowedToProvision(spTenantDomainName,
-                                    provisioningEntity,
-                                    serviceProvider,
-                                    idPName,
-                                    connectorType);
+
+                        if (isPolicyEnabled){
+                            for (ProvisioningHandler provisioningHandler: ProvisioningUtil.getOutboundProvisioningHandlers()) {
+                                isAllowed = provisioningHandler.isAllowedToProvision(spTenantDomainName,
+                                        provisioningEntity, serviceProvider, idPName, connectorType);
+                            }
                         }
+
                         if (isAllowed) {
                             executeOutboundProvisioning(provisioningEntity, executors, connectorType, idPName, proThread, isBlocking);
                         }
