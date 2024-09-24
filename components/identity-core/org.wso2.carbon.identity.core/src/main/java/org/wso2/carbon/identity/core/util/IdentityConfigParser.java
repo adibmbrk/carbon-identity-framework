@@ -61,6 +61,7 @@ public class IdentityConfigParser {
     private static Map<String, LegacyFeatureConfig> legacyFeatureConfigurationHolder = new HashMap<>();
     private static List<String> cookiesToInvalidateConfigurationHolder = new ArrayList<>();
     private static Map<String, Boolean> storeProcedureBasedDAOConfigurationHolder = new HashMap<>();
+    private static List<String> provisioningHandlerClasses = new ArrayList<String>();
     public final static String IS_DISTRIBUTED_CACHE = "isDistributed";
     public static final String IS_TEMPORARY = "isTemporary";
     private static final String SERVICE_PROVIDER_CACHE = "ServiceProviderCache";
@@ -124,6 +125,10 @@ public class IdentityConfigParser {
     public static Map<String, Boolean> getStoreProcedureBasedDAOConfigurationHolder() {
 
         return storeProcedureBasedDAOConfigurationHolder;
+    }
+
+    public List<String> getProvisioningHandlerClasses() {
+        return provisioningHandlerClasses;
     }
 
     /**
@@ -205,6 +210,8 @@ public class IdentityConfigParser {
             buildReverseProxyConfig();
             buildCookiesToInvalidateConfig();
             buildStoreProcedureBasedDAOConfig();
+            buildProvisioningHandlerClasses();
+
 
         } catch ( IOException | XMLStreamException e ) {
             throw IdentityRuntimeException.error("Error occurred while building configuration from identity.xml", e);
@@ -239,6 +246,37 @@ public class IdentityConfigParser {
             }
         }
     }
+
+    private void buildProvisioningHandlerClasses() {
+        OMElement outBoundProvisioningElement = this.getConfigElement(IdentityConstants.OUTBOUND_PROVISIONING_CONFIG);
+
+        if (outBoundProvisioningElement != null) {
+            // Retrieve the <ProvisioningHandlers> element inside <OutboundProvisioning>
+            OMElement provisioningHandlersElement = outBoundProvisioningElement.getFirstChildWithName(
+                    new QName(IdentityCoreConstants.IDENTITY_DEFAULT_NAMESPACE, IdentityConstants.PROVISIONING_HANDLERS));
+
+            if (provisioningHandlersElement != null) {
+                // Get all <ProvisioningHandler> child elements within <ProvisioningHandlers>
+                Iterator<OMElement> provisioningHandlerElements = provisioningHandlersElement.getChildrenWithName(
+                        new QName(IdentityCoreConstants.IDENTITY_DEFAULT_NAMESPACE, IdentityConstants.PROVISIONING_HANDLER));
+
+                while (provisioningHandlerElements.hasNext()) {
+                    OMElement provisioningHandlerElement = provisioningHandlerElements.next();
+
+                    String handlerClass = provisioningHandlerElement.getAttributeValue(new QName("class"));
+
+
+
+                    if (StringUtils.isNotBlank(handlerClass)) {
+                        provisioningHandlerClasses.add(handlerClass);
+                    } else {
+                        throw IdentityRuntimeException.error("Provisioning handler class attribute is missing or blank.");
+                    }
+                }
+            }
+        }
+    }
+
 
     private void buildCookiesToInvalidateConfig() {
 
@@ -634,7 +672,7 @@ public class IdentityConfigParser {
      * @param localPart local part name
      * @return Corresponding OMElement
      */
-    public OMElement getConfigElement(String localPart) {
+    public OMElement  getConfigElement(String localPart) {
         return rootElement.getFirstChildWithName(new QName(IdentityCoreConstants.IDENTITY_DEFAULT_NAMESPACE,localPart));
     }
 
