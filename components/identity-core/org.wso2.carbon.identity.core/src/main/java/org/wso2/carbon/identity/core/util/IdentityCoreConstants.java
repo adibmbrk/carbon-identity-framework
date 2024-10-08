@@ -106,11 +106,6 @@ public class IdentityCoreConstants {
     public static final String MICROSOFT = "Microsoft";
     public static final String S_MICROSOFT = "microsoft";
 
-    //Provisioning Handler Constants
-    public final static String OUTBOUND_PROVISIONING_CONFIG = "OutboundProvisioning";
-    public final static String PROVISIONING_HANDLERS = "ProvisioningHandlers";
-    public final static String PROVISIONING_HANDLER = "ProvisioningHandler";
-
     // SCIM2 constants.
     public static final String SCIM2_USER_MAX_ITEMS_PER_PAGE_ENABLED = "SCIM2.UserEndpointMaxItemsPerPageEnabled";
 

@@ -143,7 +143,6 @@ public class IdentityUtil {
     private static Map<String, ReverseProxyConfig> reverseProxyConfigurationHolder = new HashMap<>();
     private static List<String> cookiesToInvalidateConfigurationHolder = new ArrayList<>();
     private static Map<String, Boolean> storeProcedureBasedDAOConfigurationHolder = new HashMap<>();
-    private static List<String> outboundProvisioningHandlerConfigurationHolder = new ArrayList<>();
     private static Document importerDoc = null;
     private static ThreadLocal<IdentityErrorMsgContext> IdentityError = new ThreadLocal<IdentityErrorMsgContext>();
     private static final int ENTITY_EXPANSION_LIMIT = 0;
@@ -255,11 +254,6 @@ public class IdentityUtil {
         return storeProcedureBasedDAOConfigurationHolder;
     }
 
-    public static List<String> getOutboundProvisioningHandlerConfigurationHolder() {
-
-        return outboundProvisioningHandlerConfigurationHolder;
-    }
-
     /**
      * This method can use to check whether the legacy feature for the given legacy feature id is enabled or not
      *
@@ -335,8 +329,6 @@ public class IdentityUtil {
                 IdentityConfigParser.getInstance().getCookiesToInvalidateConfigurationHolder();
         storeProcedureBasedDAOConfigurationHolder =
                 IdentityConfigParser.getInstance().getStoreProcedureBasedDAOConfigurationHolder();
-        outboundProvisioningHandlerConfigurationHolder =
-                IdentityConfigParser.getInstance().getProvisioningHandlerClasses();
     }
 
     public static String getPPIDDisplayValue(String value) throws Exception {

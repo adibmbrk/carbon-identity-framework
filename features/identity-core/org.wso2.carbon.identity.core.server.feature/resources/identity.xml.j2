@@ -2011,12 +2011,6 @@
     </ApplicationMgt>
 
     <OutboundProvisioning>
-        <ProvisioningHandlers>
-            {% if outbound_provisioning_management.provisioning_handler.xacml.enable %}
-                <ProvisioningHandler class="{{outbound_provisioning_management.provisioning_handler.xacml.class}}" />
-            {% endif %}
-        </ProvisioningHandlers>
-
         {% if outbound_provisioning_management.reset_provisioning_entities_on_config_update is defined %}
             <!--
             Disabling this configuration will allow to keep the provisioned entities as it is and  will update the outbound

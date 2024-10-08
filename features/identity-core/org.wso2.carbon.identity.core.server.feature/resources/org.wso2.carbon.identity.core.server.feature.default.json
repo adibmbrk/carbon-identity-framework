@@ -515,8 +515,6 @@
   "idp_role_management.return_manually_added_local_roles": true,
   "outbound_provisioning_management.reset_provisioning_entities_on_config_update": true,
   "outbound_provisioning_management.enable_application_based_outbound_provisioning": false,
-  "outbound_provisioning_management.provisioning_handler.xacml.enable": true,
-  "outbound_provisioning_management.provisioning_handler.xacml.class": "org.wso2.carbon.identity.provisioning.rules.XACMLBasedRuleHandler",
 
   "authentication_policy.check_account_exist": true,
   "authentication.jit_provisioning.username_provisioning_url": "/accountrecoveryendpoint/register.do",
