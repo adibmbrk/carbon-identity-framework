@@ -42,8 +42,8 @@ import org.wso2.carbon.identity.provisioning.cache.ServiceProviderProvisioningCo
 import org.wso2.carbon.identity.provisioning.dao.CacheBackedProvisioningMgtDAO;
 import org.wso2.carbon.identity.provisioning.dao.ProvisioningManagementDAO;
 import org.wso2.carbon.identity.provisioning.internal.IdentityProvisionServiceComponent;
+import org.wso2.carbon.identity.provisioning.internal.ProvisioningServiceDataHolder;
 import org.wso2.carbon.identity.provisioning.rules.ProvisioningHandler;
-import org.wso2.carbon.identity.provisioning.rules.XACMLBasedRuleHandler;
 import org.wso2.carbon.idp.mgt.IdentityProviderManagementException;
 import org.wso2.carbon.idp.mgt.IdentityProviderManager;
 import org.wso2.carbon.idp.mgt.util.IdPManagementUtil;
@@ -581,9 +581,14 @@ public class OutboundProvisioningManager {
                         boolean isPolicyEnabled = entry.getValue().isPolicyEnabled();
 
                         if (isPolicyEnabled){
-                            for (ProvisioningHandler provisioningHandler: ProvisioningUtil.getOutboundProvisioningHandlers()) {
-                                isAllowed = provisioningHandler.isAllowedToProvision(spTenantDomainName,
+                            try {
+                                ProvisioningHandler provisioningHandler = ProvisioningServiceDataHolder.getInstance()
+                                        .getProvisioningHandler();
+
+                                isAllowed  = provisioningHandler.isAllowedToProvision(spTenantDomainName,
                                         provisioningEntity, serviceProvider, idPName, connectorType);
+                            } catch (NullPointerException e) {
+                                log.error("ProvisioningHandler service is not available.");
                             }
                         }
 
